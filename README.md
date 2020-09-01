@@ -2,7 +2,7 @@
 
 ## What this does
 
-This python3 script reads one column of cvr (VAT) codes from a csv file.
+This python3 script reads one column of cvr (VAT) codes from a headerless csv file.
 Each entry is sent to the cvrapi.dk and returns a json array with company data.
 The number of employees is extracted from the resultset and saved as a new row into a new csv file.
 
