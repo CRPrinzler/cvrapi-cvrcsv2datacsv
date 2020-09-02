@@ -14,11 +14,15 @@ Read the documentation in the link below
 * python3
 * 1 csv file with danish cvr / vat numbers
 
-Only request 50 values pr. on the free api account
+Only request 50 values pr. run on the free api account
 
 
 ## Run the script
-Run the script like python3 main.py or run it from your preferred IDE.
+Run the script like 
+
+python3 main.py 
+
+or run it from your preferred IDE.
 
 
 
