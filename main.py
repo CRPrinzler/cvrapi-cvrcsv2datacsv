@@ -2,11 +2,12 @@
 """
 
 import urllib.request as request
+import urllib.error
 import json 
 import csv 
 from csv import reader
 import contextlib
-import time
+#import time
 
 
 #Remember to read the cvrapi.dk documentation and adhere to the usage terms.
@@ -15,7 +16,6 @@ import time
 
 #Setting the country for the api  
 country='dk'  
-
 
 
 
@@ -29,23 +29,38 @@ with open('cvr.csv', 'r') as read_obj:
     cvr = row[0]
     #uncomment next line if you want to see whats going on.
     #print(cvr)
-    
     #call API
     request_a = request.Request(
-    url='http://cvrapi.dk/api?search=' + cvr + '&country=%s' % (country),
+    url='https://cvrapi.dk/api?search='+cvr+'&country=%s' % (country),
     headers={
-      'User-Agent': 'INSERT YOUR AGENT DATA HERE adhere to documentation'})
-    with contextlib.closing(request.urlopen(request_a)) as response:
+    'User-Agent': 'YOUR AGENT DATA GOES HERE})
+        
+    try:
+        with contextlib.closing(request.urlopen(request_a)) as response:
+            y = (json.loads(response.read()))   
+    except urllib.error.HTTPError as e:
+        print('HTTPError: {}'.format(e.code))
+    
+    else:
      #get employee data
-     y = (json.loads(response.read()))
-     #save the data to csv
-     csvRow = [y["employees"]]
-     print(csvRow)
-     csvfile = "data.csv"
-     with open(csvfile, "a") as fp:
-      wr = csv.writer(fp, dialect='excel')
-      wr.writerow(csvRow)
-      #Go to sleep for some seconds in order not to stress the API
-      time.sleep(60)
+     try:
+         csvRow = [y["employees"]]
+         #save the data to csv
+         print(csvRow)
+         csvfile = "datapull.csv"
+         with open(csvfile, "a") as fp:
+          wr = csv.writer(fp, dialect='excel')
+          wr.writerow(csvRow)
+      
+     except KeyError:
+         csvRow = "NOT_FOUND"
+         #save the data to csv
+         #print(csvRow)
+         csvfile = "datapull.csv"
+         with open(csvfile, "a") as fp:
+          wr = csv.writer(fp, dialect='excel')
+          wr.writerow(csvRow)
+         
   else:
       print("DONE")
+
